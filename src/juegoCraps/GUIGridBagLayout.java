@@ -2,6 +2,8 @@ package juegoCraps;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class GUIGridBagLayout extends JFrame {
     private static final String MENSAJE_INICIO="Bienvenido a Craps\n" +
@@ -20,7 +22,7 @@ public class GUIGridBagLayout extends JFrame {
     private JPanel panelDados;
     private ImageIcon imageDado;
     private JTextArea mensajesSalida, resultadosDados;
-    //private Escucha escucha;
+    private Escucha escucha;
     private ModelCraps modelCraps;
 
     public GUIGridBagLayout(){
@@ -40,10 +42,56 @@ public class GUIGridBagLayout extends JFrame {
         GridBagConstraints constraints = new GridBagConstraints();
 
         //Create Listener Object or Control Object
-       // escucha = new Escucha();
+        escucha = new Escucha();
         modelCraps = new ModelCraps();
         //Set up JComponents
         headerProject = new Header("Mesa Juego Craps", Color.BLACK);
-        this.add(headerProject,BorderLayout.NORTH);
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        this.add(headerProject,constraints);
+
+        ayuda = new JButton(" ? "); // puedo poner icono o imgen
+        ayuda.addActionListener(escucha);
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.anchor = GridBagConstraints.LINE_START;
+        this.add(ayuda,constraints);
+
+        salir = new JButton("Salir");
+        ayuda.addActionListener(escucha);
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.anchor = GridBagConstraints.LINE_END;
+        this.add(salir,constraints);
+    }
+
+    public static void main(String[] args){
+        EventQueue.invokeLater(() -> {
+            GUIGridBagLayout miProjectGUI = new GUIGridBagLayout();
+        });
+    }
+
+    private class Escucha implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            modelCraps.calcularTiro();
+            int[] caras = modelCraps.getCaras();
+            imageDado = new ImageIcon(getClass().getResource("/resources/"+caras[0]+".png"));
+            dado1.setIcon(imageDado);;
+            imageDado = new ImageIcon(getClass().getResource("/resources/"+caras[1]+".png"));
+            dado2.setIcon(imageDado);
+            modelCraps.determinarJuego();
+
+            resultadosDados.setText(modelCraps.getEstadoToString()[0]);
+            mensajesSalida.setRows(4);
+            mensajesSalida.setText(modelCraps.getEstadoToString()[1]);
+        }
     }
 }
