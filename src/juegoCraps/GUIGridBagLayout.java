@@ -16,6 +16,8 @@ public class GUIGridBagLayout extends JFrame {
             "\nsin  que previamente hayas sacado 7";
 
 
+    private int x, y;
+
     private Header headerProject;
     private JLabel dado1, dado2;
     private JButton lanzar, ayuda, salir;
@@ -124,6 +126,7 @@ public class GUIGridBagLayout extends JFrame {
         constraints.anchor = GridBagConstraints.CENTER;
         add(mensajesSalida,constraints);
     }
+
 
     public static void main(String[] args){
         EventQueue.invokeLater(() -> {
